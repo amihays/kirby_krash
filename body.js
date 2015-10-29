@@ -12,6 +12,10 @@
     this.modifyVerticesRelativePosition();
   }
 
+  Body.prototype.stop = function () {
+    this.velocity.y = 0;
+  }
+
   Body.prototype.calcMass = function () {
     var totalMass = 0;
     this.vertices.forEach(function(vertex) {
@@ -49,23 +53,27 @@
     });
   }
 
-  Body.prototype.updateForces = function () {
+  Body.prototype.updateForces = function (gravity) {
     this.force = new BB.Vector(0, 0);
     this.torque = 0;
     this.vertices.forEach(function (vertex) {
+      vertex.updateForce(gravity);
       var bodyForce = vertex.force.unitVector();
       var relDirection = vertex.relPos.unitVector();
       bodyForce = bodyForce.scale(Math.abs(relDirection.dot(vertex.force)));
       this.force = this.force.add(bodyForce);
-      this.torque += vertex.relPos.cross(vertex.force);
+      this.torque += vertex.force.cross(vertex.relPos);
     }.bind(this))
   }
 
-  Body.prototype.move = function (dt) {
-    this.updateForces();
+  Body.prototype.move = function (dt, gravity) {
+    this.updateForces(gravity, this.stop.bind(this));
     this.position = this.position.add(this.velocity.scale(dt));
     var acceleration = this.force.scale(1/this.mass);
     this.velocity = this.velocity.add(acceleration)
+
+    this.angVel += this.torque / 1000000
+
     this.vertices.forEach(function (vertex) {
       vertex.rotate(this.angVel);
       vertex.updateAbsPosition(this.position);

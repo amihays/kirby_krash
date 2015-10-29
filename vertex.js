@@ -8,6 +8,18 @@
     this.absPos = new BB.Vector(0, 0);
   }
 
+  Vertex.prototype.updateForce = function (gravity, stopCallback) {
+    var totalForce = new BB.Vector(0, 0)
+    totalForce = totalForce.add(gravity.scale(this.mass));
+    if (this.absPos.y + (this.mass / 3) >= BB.Game.DIM_Y) {
+      // var penetration = this.absPos.y -(BB.Game.DIM_Y - buffer);
+      // totalForce = totalForce.subtract(gravity.scale(this.mass * 10));
+      // totalForce = totalForce.add(new BB.Vector(0, -10))
+      // stopCallback();
+    }
+    this.force = totalForce;
+  }
+
   Vertex.prototype.updateAbsPosition = function (bodyPos) {
     this.absPos = this.relPos.add(bodyPos);
   }
@@ -28,5 +40,12 @@
             Math.PI * 2,
             false);
     ctx.fill();
+
+    var scale = 60;
+    ctx.fillStyle = "green";
+    ctx.beginPath();
+    ctx.moveTo(this.absPos.x, this.absPos.y)
+    ctx.lineTo(this.force.x * scale + this.absPos.x, this.force.y * scale + this.absPos.y);
+    ctx.stroke();
   }
 }())
