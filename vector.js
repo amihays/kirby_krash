@@ -6,6 +6,15 @@
     this.y = y;
   }
 
+  Vector.prototype.unitVector = function () {
+    var mag = this.magnitude();
+    if (mag === 0) {
+      return new Vector(0, 0);
+    } else {
+      return this.scale(1/mag);
+    }
+  }
+
   Vector.prototype.scale = function (scalar) {
     return new Vector(this.x * scalar, this.y * scalar)
   }

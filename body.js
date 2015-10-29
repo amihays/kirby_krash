@@ -1,11 +1,10 @@
 (function () {
   window.BB = window.BB || {};
 
-  var Body = BB.Body = function (position, velocity, force, angle, angVel, torque, vertices) {
+  var Body = BB.Body = function (position, velocity, force, angVel, torque, vertices) {
     this.position = position;
     this.velocity = velocity;
     this.force = force;
-    this.angle = angle;
     this.angVel = angVel; // angular velocity
     this.torque = torque; // angular acceleration
     this.vertices = vertices;
@@ -22,18 +21,29 @@
   }
 
   Body.prototype.modifyVerticesRelativePosition = function () {
-    var centerOfMass = new BB.Vector(0, 0);
+    var vectorSum = new BB.Vector(0, 0);
     this.vertices.forEach(function(vertex) {
-      centerOfMass = centerOfMass.add(vertex.relPos.scale(vertex.mass));
+      vectorSum = vectorSum.add(vertex.relPos.scale(vertex.mass));
     })
-    centerOfMass = centerOfMass.scale(1/this.mass);
+    centerOfMass = vectorSum.scale(1/this.mass);
     this.vertices.forEach(function (vertex) {
-      vertex.relPos = vertex.relPos.add(centerOfMass);
+      vertex.relPos = vertex.relPos.subtract(centerOfMass);
       vertex.updateAbsPosition(this.position);
     }.bind(this))
   }
 
   Body.prototype.draw = function (ctx) {
+    ctx.fillStyle = "red";
+    ctx.beginPath();
+
+    ctx.arc(this.position.x, //x pos
+            this.position.y, //y pos
+            5,
+            0,
+            Math.PI * 2,
+            false);
+    ctx.fill();
+
     this.vertices.forEach(function(vertex){
       vertex.draw(ctx);
     });
@@ -43,10 +53,11 @@
     this.force = new BB.Vector(0, 0);
     this.torque = 0;
     this.vertices.forEach(function (vertex) {
-      var bodyForce = vertex.force.scale(1/vertex.force.magnitude());
-      bodyForce = bodyForce.scale(Math.abs(vertex.relPos.dot(vertex.force)));
+      var bodyForce = vertex.force.unitVector();
+      var relDirection = vertex.relPos.unitVector();
+      bodyForce = bodyForce.scale(Math.abs(relDirection.dot(vertex.force)));
       this.force = this.force.add(bodyForce);
-      this.torque += vertex.relPos.cross(vertex.force)
+      this.torque += vertex.relPos.cross(vertex.force);
     }.bind(this))
   }
 
@@ -56,6 +67,7 @@
     var acceleration = this.force.scale(1/this.mass);
     this.velocity = this.velocity.add(acceleration)
     this.vertices.forEach(function (vertex) {
+      vertex.rotate(this.angVel);
       vertex.updateAbsPosition(this.position);
     }.bind(this))
   }

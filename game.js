@@ -14,15 +14,14 @@
     var position = new BB.Vector(300, 300);
     var velocity = new BB.Vector(0, 0);
     var force = new BB.Vector(0, 0);
-    var angle = 0;
-    var angVel = 0;
+    var angVel = 0.01;
     var torque = 0;
     var vertices = [
-      new BB.Vertex(new BB.Vector(-1, 0), new BB.Vector(-50, 0), 100),
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-50, 0), 100),
       new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(50, 0), 50),
       new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(0, -100), 80)
     ]
-    return new BB.Body(position, velocity, force, angle, angVel, torque, vertices);
+    return new BB.Body(position, velocity, force, angVel, torque, vertices);
   }
 
   Game.prototype.draw = function(ctx){

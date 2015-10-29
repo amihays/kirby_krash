@@ -12,6 +12,11 @@
     this.absPos = this.relPos.add(bodyPos);
   }
 
+  Vertex.prototype.rotate = function (theta) {
+    this.relPos.x = this.relPos.x * Math.cos(theta) + this.relPos.y * Math.sin(theta);
+    this.relPos.y = this.relPos.x * -Math.sin(theta) + this.relPos.y * Math.cos(theta);
+  }
+
   Vertex.prototype.draw = function(ctx){
     ctx.fillStyle = "blue";
     ctx.beginPath();
