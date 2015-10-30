@@ -18,7 +18,7 @@
     var angVel = 0;
     var torque = 0;
     var vertices = [
-      new BB.Vertex(new BB.Vector(1, 0), new BB.Vector(-50, 0), 10),
+      new BB.Vertex(new BB.Vector(10, 0), new BB.Vector(-50, 0), 10),
       new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(50, 0), 5),
       new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(0, -100), 8)
     ]
