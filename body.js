@@ -2,6 +2,14 @@
   window.BB = window.BB || {};
 
   var Body = BB.Body = function (position, velocity, force, angVel, torque, vertices) {
+    this.lastPosition = position;
+    this.lastVelocity = velocity;
+    this.lastForce = force;
+    this.lastTorque = torque;
+    this.lastAngVel = angVel;
+    this.lastAngle = 0;
+    this.centerOfMass = new BB.Vector(0, 0);
+    this.angle = 0;
     this.position = position;
     this.velocity = velocity;
     this.force = force;
@@ -10,6 +18,7 @@
     this.vertices = vertices;
     this.mass = this.calcMass();
     this.modifyVerticesRelativePosition();
+    this.calcMomentOfInertia();
   }
 
   Body.prototype.stop = function () {
@@ -24,16 +33,25 @@
     return totalMass;
   }
 
+  Body.prototype.calcMomentOfInertia = function () {
+    this.momentOfInertia = 0;
+    this.vertices.forEach(function(vertex) {
+      this.momentOfInertia += vertex.mass * Math.pow(vertex.relPos.magnitude(), 2);
+    }.bind(this))
+  }
+
   Body.prototype.modifyVerticesRelativePosition = function () {
     var vectorSum = new BB.Vector(0, 0);
     this.vertices.forEach(function(vertex) {
       vectorSum = vectorSum.add(vertex.relPos.scale(vertex.mass));
     })
-    centerOfMass = vectorSum.scale(1/this.mass);
+    this.centerOfMass = vectorSum.scale(1 / this.mass);
     this.vertices.forEach(function (vertex) {
-      vertex.relPos = vertex.relPos.subtract(centerOfMass);
+      vertex.relPos = vertex.relPos.subtract(this.centerOfMass);
+      vertex.origRelPos = vertex.origRelPos.subtract(this.centerOfMass);
       vertex.updateAbsPosition(this.position);
     }.bind(this))
+    this.centerOfMass = new BB.Vector(0, 0);
   }
 
   Body.prototype.draw = function (ctx) {
@@ -66,17 +84,30 @@
     }.bind(this))
   }
 
+  Body.prototype.resetLastVars = function () {
+    this.lastPosition = this.position;
+    this.lastVelocity = this.velocity;
+    this.lastForce = this.force;
+    this.lastAngVel = this.angVel;
+    this.lastTorque = this.torque;
+    this.lastAngle = this.angle;
+  }
+
   Body.prototype.move = function (dt, gravity) {
     this.updateForces(gravity, this.stop.bind(this));
-    this.position = this.position.add(this.velocity.scale(dt));
+    var lastAcceleration = this.lastForce.scale(1/this.mass);
     var acceleration = this.force.scale(1/this.mass);
-    this.velocity = this.velocity.add(acceleration)
-
-    this.angVel += this.torque / 1000000
+    this.position = this.lastPosition.add(this.lastVelocity.scale(dt)).add(lastAcceleration.scale(0.5 * Math.pow(dt, 2)));
+    this.velocity = this.lastVelocity.add((lastAcceleration.add(acceleration)).scale(0.5 * dt))
+    var I = this.momentOfInertia;
+    this.angle = this.lastAngle + (this.lastAngVel * dt) + (0.5 * this.lastTorque * Math.pow(dt, 2) * (1 / I))
+    this.angVel = this.lastAngVel + 0.5 * (this.lastTorque + this.torque) * (dt / I);
 
     this.vertices.forEach(function (vertex) {
-      vertex.rotate(this.angVel);
+      vertex.rotate(this.angle);
       vertex.updateAbsPosition(this.position);
     }.bind(this))
+
+    this.resetLastVars();
   }
 }())

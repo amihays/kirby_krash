@@ -18,7 +18,7 @@
     var angVel = 0;
     var torque = 0;
     var vertices = [
-      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-50, 0), 10),
+      new BB.Vertex(new BB.Vector(1, 0), new BB.Vector(-50, 0), 10),
       new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(50, 0), 5),
       new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(0, -100), 8)
     ]
@@ -43,8 +43,8 @@
   }
 
   Game.prototype.step = function(ctx){
-    this.moveObjects();
     this.draw(ctx);
+    this.moveObjects();
     // this.checkCollisions();
     // this.applyGravity();
   }
