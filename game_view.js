@@ -13,7 +13,19 @@
       gameView.game.step(gameView.ctx);
     }, 20);
   }
-  
+
+  var lastTime;
+  GameView.prototype.main = function () {
+    var now = Date.now();
+    var dt = (now - lastTime) / 1000.0;
+
+    update(dt);
+    render();
+
+    lastTime = now;
+    requestAnimFrame(main);
+  };
+
   //
   // GameView.prototype.bindKeyHandlers = function(){
   //   var gameView = this;

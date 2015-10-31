@@ -63,10 +63,11 @@
     var scalar = 0.3;
     ctx.drawImage(drawing,
                   scalar * (-drawing.width / 2),
-                  scalar * (-drawing.height / 2),
+                  scalar * (-drawing.height / 2 - 20),
                   drawing.width * scalar,
                   drawing.height * scalar);
     ctx.restore();
+    
     ctx.fillStyle = "red";
     ctx.beginPath();
 
@@ -109,16 +110,29 @@
     this.updateForces(gravity, this.stop.bind(this));
     var lastAcceleration = this.lastForce.scale(1/this.mass);
     var acceleration = this.force.scale(1/this.mass);
-    this.position = this.lastPosition.add(this.lastVelocity.scale(dt)).add(lastAcceleration.scale(0.5 * Math.pow(dt, 2)));
     this.velocity = this.lastVelocity.add((lastAcceleration.add(acceleration)).scale(0.5 * dt))
+    if (this.velocity.magnitude() > 20) {
+      this.velocity = this.velocity.scale(0.99);
+    }
+    this.position = this.lastPosition.add(this.lastVelocity.scale(dt)).add(lastAcceleration.scale(0.5 * Math.pow(dt, 2)));
     var I = this.momentOfInertia;
-    this.angle = this.lastAngle + (this.lastAngVel * dt) + (0.5 * this.lastTorque * Math.pow(dt, 2) * (1 / I))
     this.angVel = this.lastAngVel + 0.5 * (this.lastTorque + this.torque) * (dt / I);
+    if (Math.abs(this.angVel) > .2) {
+      this.angVel = this.angVel*(0.99);
+    }
+    this.angle = this.lastAngle + (this.lastAngVel * dt) + (0.5 * this.lastTorque * Math.pow(dt, 2) * (1 / I))
 
     this.vertices.forEach(function (vertex) {
       vertex.rotate(this.angle);
       vertex.updateAbsPosition(this.position);
     }.bind(this))
+    //
+    // this.vertices.forEach(function (vertex) {
+    //   var diffY = (vertex.absPos.y + vertex.radius) - BB.Game.DIM_Y;
+    //   if (diffY > 0) {
+    //     vertex.force.y = -1000;
+    //   }
+    // }.bind(this))
 
     this.resetLastVars();
   }
