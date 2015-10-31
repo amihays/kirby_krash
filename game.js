@@ -27,11 +27,17 @@
     var angVel = 0;
     var torque = 0;
     var vertices = [
-      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-25, 0), 14),
-      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(25, 0), 15),
-      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(0, -50), 25),
-      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-10, 15), 25),
-      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(10, 15), 25)
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(8, -38), 15), //top of head
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-5, -30), 15), //left top of head
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(26, -37), 15), //right top of head
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(43, -15), 15), //right armpit
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-10, 0), 15), //left armpit
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(53, 10), 15), //right foot
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(30, 13), 15), //crotch
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(10, 28), 15), //left foot
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(-22, -15), 15), //left arm
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(50, -32), 15), //right arm
+      new BB.Vertex(new BB.Vector(0, 0), new BB.Vector(10, 8), 100) //center
     ]
     return new BB.Body(position, velocity, force, angVel, torque, vertices);
   }
@@ -55,7 +61,7 @@
     // this.sprite.update()
   }
 
-  
+
 
   Game.prototype.step = function(ctx){
     this.draw(ctx);

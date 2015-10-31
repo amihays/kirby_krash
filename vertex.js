@@ -7,7 +7,7 @@
     this.mass = mass;
     this.absPos = new BB.Vector(0, 0);
     this.force = force;
-    this.radius = radius || this.mass / 3;
+    this.radius = radius || this.mass / 10;
   }
 
   Vertex.prototype.updateForce = function (gravity) {
@@ -36,13 +36,13 @@
 
     ctx.arc(this.absPos.x, //x pos
             this.absPos.y, //y pos
-            this.mass / 3,
+            this.radius,
             0,
             Math.PI * 2,
             false);
     ctx.fill();
 
-    var scale = 60;
+    var scale = 6;
     ctx.fillStyle = "green";
     ctx.beginPath();
     ctx.moveTo(this.absPos.x, this.absPos.y)

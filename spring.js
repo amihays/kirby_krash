@@ -5,6 +5,8 @@
                          [250, 125], [375, 125], [500, 125], [625, 125]]
 
   var Spring = BB.Spring = function () {
+    this.drawing = new Image();
+    this.drawing.src = "spring_sprite.png";
     this.position = [BB.Game.DIM_X / 2, BB.Game.DIM_Y - 20];
     this.springing = false;
     // this.phaseIdx = false;
@@ -16,12 +18,9 @@
   }
 
   Spring.prototype.setSprite = function () {
-    var drawing = new Image()
-    drawing.src = "spring_sprite.png"
-
     if (this.springing) {
       var phaseIdx = Math.floor(this._tickCount / this.ticksPerFrame)
-      this.sprite = new BB.Sprite(drawing,
+      this.sprite = new BB.Sprite(this.drawing,
                                   this.position,
                                   [125, 125],
                                   .2,
@@ -36,7 +35,7 @@
       }
 
     } else {
-      this.sprite = new BB.Sprite(drawing,
+      this.sprite = new BB.Sprite(this.drawing,
                                   this.position,
                                   [125, 125],
                                   .2,

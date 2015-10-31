@@ -19,6 +19,8 @@
     this.mass = this.calcMass();
     this.modifyVerticesRelativePosition();
     this.calcMomentOfInertia();
+    this.drawing = new Image();
+    this.drawing.src = "kirby.png";
   }
 
   Body.prototype.stop = function () {
@@ -55,17 +57,15 @@
   }
 
   Body.prototype.draw = function (ctx) {
-    drawing = new Image()
-    drawing.src = "pixel_robot.jpg"
     ctx.save();
     ctx.translate(this.position.x, this.position.y);
     ctx.rotate(-this.angle);
-    var scalar = 0.3;
-    ctx.drawImage(drawing,
-                  scalar * (-drawing.width / 2),
-                  scalar * (-drawing.height / 2 - 20),
-                  drawing.width * scalar,
-                  drawing.height * scalar);
+    var scalar = 0.125;
+    ctx.drawImage(this.drawing,
+                  scalar * (-this.drawing.width / 2),
+                  scalar * (-this.drawing.height / 2 - 20),
+                  this.drawing.width * scalar,
+                  this.drawing.height * scalar);
     ctx.restore();
     
     ctx.fillStyle = "red";
