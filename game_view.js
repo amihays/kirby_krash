@@ -10,7 +10,7 @@
     var gameView = this;
     setInterval(function(){
       gameView.game.step(gameView.ctx);
-    }, 20);
+    }, 10);
   }
 
   var lastTime;
