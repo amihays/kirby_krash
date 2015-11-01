@@ -6,7 +6,6 @@
     this.dt = .2;
     this.gravity = new BB.Vector(0, 1)
     this.spring = new BB.Spring()
-
     // var drawing = new Image()
     // drawing.src = "spring_sprite.png"
     // this.sprite = new BB.Sprite(drawing,
@@ -51,22 +50,37 @@
   }
 
   Game.prototype.allObjects = function () {
-    return this.bodies.concat([this.spring])
+    return this.bodies.concat([this.spring]);
   }
 
   Game.prototype.moveObjects = function () {
-    this.bodies.forEach(function (body) {
+    this.allObjects().forEach(function (body) {
       body.move(this.dt, this.gravity);
     }.bind(this))
     // this.sprite.update()
   }
-
-
+  //
+  // Game.prototype.allBoxes = function (ctx) {
+  //   var boxes = [];
+  //   // this.allObjects().forEach(function(object) {
+  //   //   if (object.box) {
+  //   //     boxes.push(object.box)
+  //   //   }
+  //   // })
+  //   return boxes;
+  // }
+  Game.prototype.vertices = function () {
+    var vertices = [];
+    this.bodies.forEach(function (body) {
+      vertices = vertices.concat(body.vertices)
+    }.bind(this))
+    return vertices;
+  }
 
   Game.prototype.step = function(ctx){
     this.draw(ctx);
     this.moveObjects();
-    // this.checkCollisions();
+    this.spring.applyCollisionForce(this.vertices());
     // this.applyGravity();
   }
 }())
