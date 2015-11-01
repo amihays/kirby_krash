@@ -42,6 +42,12 @@
     }.bind(this))
   }
 
+  Body.prototype.clearVertexForces = function () {
+    this.vertices.forEach(function (vertex) {
+      vertex.force = new BB.Vector(0, 0);
+    })
+  }
+
   Body.prototype.modifyVerticesRelativePosition = function () {
     var vectorSum = new BB.Vector(0, 0);
     this.vertices.forEach(function(vertex) {
@@ -67,21 +73,21 @@
                   this.drawing.width * scalar,
                   this.drawing.height * scalar);
     ctx.restore();
-    
-    ctx.fillStyle = "red";
-    ctx.beginPath();
-
-    ctx.arc(this.position.x, //x pos
-            this.position.y, //y pos
-            5,
-            0,
-            Math.PI * 2,
-            false);
-    ctx.fill();
-
-    this.vertices.forEach(function(vertex){
-      vertex.draw(ctx);
-    });
+  //
+  //   ctx.fillStyle = "red";
+  //   ctx.beginPath();
+  //
+  //   ctx.arc(this.position.x, //x pos
+  //           this.position.y, //y pos
+  //           5,
+  //           0,
+  //           Math.PI * 2,
+  //           false);
+  //   ctx.fill();
+  //
+  //   this.vertices.forEach(function(vertex){
+  //     vertex.draw(ctx);
+  //   });
   }
 
   Body.prototype.updateForces = function (gravity) {
@@ -111,14 +117,18 @@
     var lastAcceleration = this.lastForce.scale(1/this.mass);
     var acceleration = this.force.scale(1/this.mass);
     this.velocity = this.lastVelocity.add((lastAcceleration.add(acceleration)).scale(0.5 * dt))
-    if (this.velocity.magnitude() > 20) {
-      this.velocity = this.velocity.scale(0.99);
+    if (this.velocity.magnitude() > 70) {
+      this.velocity = this.velocity.unitVector().scale(70);
+    } else if (this.velocity.magnitude() > 40) {
+      this.velocity = this.velocity.scale(0.98);
     }
     this.position = this.lastPosition.add(this.lastVelocity.scale(dt)).add(lastAcceleration.scale(0.5 * Math.pow(dt, 2)));
     var I = this.momentOfInertia;
     this.angVel = this.lastAngVel + 0.5 * (this.lastTorque + this.torque) * (dt / I);
-    if (Math.abs(this.angVel) > .2) {
-      this.angVel = this.angVel*(0.99);
+    if (Math.abs(this.angVel) > 0.4) {
+      this.angVel = 0.3;
+    } else if (Math.abs(this.angVel) > 0.2) {
+      this.angVel = this.angVel * (0.99);
     }
     this.angle = this.lastAngle + (this.lastAngVel * dt) + (0.5 * this.lastTorque * Math.pow(dt, 2) * (1 / I))
 
@@ -135,5 +145,6 @@
     // }.bind(this))
 
     this.resetLastVars();
+    this.clearVertexForces();
   }
 }())

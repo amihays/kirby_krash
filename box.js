@@ -27,6 +27,8 @@
   Box.prototype.getConvexForce = function (contactPos) {
     var diffVector = contactPos.subtract(this.getCenter());
     var unitVector = diffVector.unitVector();
+    unitVector.x *= 0.2;
+    unitVector.y *= 4;
     return unitVector.scale(this.forceMag);
   }
 
@@ -51,8 +53,8 @@
   }
 
   Box.prototype.draw = function (ctx) {
-    ctx.rect(this.position.x,this.position.y,this.width,this.height);
-    ctx.stroke();
+    // ctx.rect(this.position.x,this.position.y, this.width, this.height);
+    // ctx.stroke();
   }
 
   Box.prototype.move = function () {

@@ -4,7 +4,7 @@
   var Game = BB.Game = function () {
     this.bodies = [Game.bodyBuilder()];
     this.dt = .2;
-    this.gravity = new BB.Vector(0, 1)
+    this.gravity = new BB.Vector(0, 0)
     this.spring = new BB.Spring()
     // var drawing = new Image()
     // drawing.src = "spring_sprite.png"
@@ -20,8 +20,8 @@
   Game.DIM_Y = window.innerHeight;
 
   Game.bodyBuilder = function () {
-    var position = new BB.Vector(300, 300);
-    var velocity = new BB.Vector(0, 0);
+    var position = new BB.Vector(300, 100);
+    var velocity = new BB.Vector(0, 9);
     var force = new BB.Vector(0, 0);
     var angVel = 0;
     var torque = 0;

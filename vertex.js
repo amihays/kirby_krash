@@ -11,14 +11,17 @@
   }
 
   Vertex.prototype.updateForce = function (gravity) {
-    var totalForce = new BB.Vector(0, 0)
+    var restoringForce = 50000;
     if (this.absPos.y > BB.Game.DIM_Y) {
-      totalForce.y += -5000;
+      this.force.y += -restoringForce;
     } else if (this.absPos.y < 0) {
-      totalForce.y = 1000;
+      this.force.y = restoringForce;
+    } else if (this.absPos.x < 0) {
+      this.force.x = restoringForce;
+    } else if (this.absPos.x > BB.Game.DIM_X) {
+      this.force.x = -restoringForce;
     }
-    totalForce = totalForce.add(gravity.scale(this.mass));
-    this.force = totalForce;
+    this.force = this.force.add(gravity.scale(this.mass));
   }
 
   Vertex.prototype.updateAbsPosition = function (bodyPos) {
