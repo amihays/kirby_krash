@@ -21,6 +21,7 @@
     this.calcMomentOfInertia();
     this.drawing = new Image();
     this.drawing.src = "kirby.png";
+    this.speed = 25;
   }
 
   Body.prototype.stop = function () {
@@ -94,11 +95,20 @@
     this.force = new BB.Vector(0, 0);
     this.torque = 0;
     this.vertices.forEach(function (vertex) {
-      vertex.updateForce(gravity);
-      var bodyForce = vertex.force.unitVector();
+      if (vertex.outOfBoundsX() === -1) {
+        this.velocity.x = Math.abs(this.velocity.x)
+      } else if (vertex.outOfBoundsX() === 1) {
+        this.velocity.x = -Math.abs(this.velocity.x)
+      }
+      if (vertex.outOfBoundsY() === -1) {
+        this.velocity.y = Math.abs(this.velocity.y)
+      } else if (vertex.outOfBoundsY() === 1) {
+        this.velocity.y = -Math.abs(this.velocity.y)
+      }
+      // var bodyForce = vertex.force.unitVector();
       var relDirection = vertex.relPos.unitVector();
-      bodyForce = bodyForce.scale(Math.abs(relDirection.dot(vertex.force)));
-      this.force = this.force.add(bodyForce);
+      // bodyForce = bodyForce.scale(Math.abs(relDirection.dot(vertex.force)));
+      // this.force = this.force.add(bodyForce);
       this.torque += vertex.force.cross(vertex.relPos);
     }.bind(this))
   }
@@ -116,12 +126,12 @@
     this.updateForces(gravity, this.stop.bind(this));
     var lastAcceleration = this.lastForce.scale(1/this.mass);
     var acceleration = this.force.scale(1/this.mass);
-    this.velocity = this.lastVelocity.add((lastAcceleration.add(acceleration)).scale(0.5 * dt))
-    if (this.velocity.magnitude() > 70) {
-      this.velocity = this.velocity.unitVector().scale(70);
-    } else if (this.velocity.magnitude() > 40) {
-      this.velocity = this.velocity.scale(0.98);
-    }
+    // this.velocity = this.lastVelocity.add((lastAcceleration.add(acceleration)).scale(0.5 * dt))
+    // if (this.velocity.magnitude() > this.speed) {
+    this.velocity = this.velocity.unitVector().scale(this.speed);
+    // } else if (this.velocity.magnitude() > this.speed * 0.5) {
+    //   this.velocity = this.velocity.scale(0.98);
+    // }
     this.position = this.lastPosition.add(this.lastVelocity.scale(dt)).add(lastAcceleration.scale(0.5 * Math.pow(dt, 2)));
     var I = this.momentOfInertia;
     this.angVel = this.lastAngVel + 0.5 * (this.lastTorque + this.torque) * (dt / I);

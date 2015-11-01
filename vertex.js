@@ -10,18 +10,44 @@
     this.radius = radius || this.mass / 10;
   }
 
-  Vertex.prototype.updateForce = function (gravity) {
+  Vertex.prototype.outOfBoundsX = function () {
+    var restoringForce = 50000;
+    if (this.absPos.x < 0) {
+      this.force.x = restoringForce;
+      return -1;
+    } else if (this.absPos.x > BB.Game.DIM_X) {
+      this.force.x = -restoringForce;
+      return 1;
+    }
+  }
+
+  Vertex.prototype.outOfBoundsY = function () {
+    var restoringForce = 50000;
+    if (this.absPos.y < 0) {
+      this.force.y = restoringForce;
+      return -1;
+    } else if (this.absPos.y > BB.Game.DIM_Y) {
+      this.force.y = -restoringForce;
+      return 1;
+    }
+  }
+
+  Vertex.prototype.updateForce = function (gravity, body) {
     var restoringForce = 50000;
     if (this.absPos.y > BB.Game.DIM_Y) {
       this.force.y += -restoringForce;
+      body.velocity.y = - body.velocity.y;
     } else if (this.absPos.y < 0) {
       this.force.y = restoringForce;
+      body.velocity.y = - body.velocity.y;
     } else if (this.absPos.x < 0) {
       this.force.x = restoringForce;
+      body.velocity.x = - body.velocity.x;
     } else if (this.absPos.x > BB.Game.DIM_X) {
       this.force.x = -restoringForce;
+      body.velocity.x = - body.velocity.x;
     }
-    this.force = this.force.add(gravity.scale(this.mass));
+    // this.force = this.force.add(gravity.scale(this.mass));
   }
 
   Vertex.prototype.updateAbsPosition = function (bodyPos) {

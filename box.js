@@ -16,15 +16,23 @@
     }
   }
 
-  Box.prototype.getForce = function (contactPos) {
+  Box.prototype.getForce = function (contactPos, body) {
     if (this.convexEdges) {
-      return this.getConvexForce(contactPos);
+      return this.getConvexForce(contactPos, body);
     } else {
-      return this.getFlatForce(contactPos);
+      return this.getFlatForce(contactPos, body);
     }
   }
 
-  Box.prototype.getConvexForce = function (contactPos) {
+  Box.prototype.getConvexForce = function (contactPos, body) {
+    if (body.velocity.y > 0) {
+      body.velocity.y = -body.velocity.y;
+      if (contactPos.x - this.getCenter().x > 30) {
+        body.velocity.x += 30;
+      } else if (contactPos.x - this.getCenter().x < -30) {
+        body.velocity.x -= 30;
+      }
+    }
     var diffVector = contactPos.subtract(this.getCenter());
     var unitVector = diffVector.unitVector();
     unitVector.x *= 0.2;
@@ -32,7 +40,7 @@
     return unitVector.scale(this.forceMag);
   }
 
-  Box.prototype.getFlatForce = function (contactPos) {
+  Box.prototype.getFlatForce = function (contactPos, body) {
     // var force;
     // var leftDiffX = this.position.x - contactPos.x;
     // var rightDiffX = this.position.x + this.width - contactPos.x;

@@ -6,6 +6,7 @@
     this.dt = .2;
     this.gravity = new BB.Vector(0, 0)
     this.spring = new BB.Spring()
+    this.bricks = [new BB.Brick(new BB.Vector(100, 100), 100, this.handleBrickCollision.bind(this))]
     // var drawing = new Image()
     // drawing.src = "spring_sprite.png"
     // this.sprite = new BB.Sprite(drawing,
@@ -21,7 +22,7 @@
 
   Game.bodyBuilder = function () {
     var position = new BB.Vector(300, 100);
-    var velocity = new BB.Vector(0, 9);
+    var velocity = new BB.Vector(0, 50);
     var force = new BB.Vector(0, 0);
     var angVel = 0;
     var torque = 0;
@@ -50,7 +51,7 @@
   }
 
   Game.prototype.allObjects = function () {
-    return this.bodies.concat([this.spring]);
+    return this.bodies.concat([this.spring]).concat(this.bricks);
   }
 
   Game.prototype.moveObjects = function () {
@@ -69,6 +70,12 @@
   //   // })
   //   return boxes;
   // }
+
+  Game.prototype.handleBrickCollision = function (brick) {
+    var brickIdx = this.bricks.indexOf(brick);
+    this.bricks.splice(brickIdx, 1);
+  }
+
   Game.prototype.vertices = function () {
     var vertices = [];
     this.bodies.forEach(function (body) {
@@ -77,10 +84,21 @@
     return vertices;
   }
 
+  Game.prototype.handleCollisions = function () {
+    this.spring.applyCollisionForce(this.vertices(), this.bodies[0]);
+    this.bricks.forEach(function (brick) {
+      this.bodies.forEach(function (body) {
+        body.vertices.forEach(function (vertex) {
+          brick.collisionUpdate(vertex);
+        })
+      })
+    }.bind(this))
+  }
+
   Game.prototype.step = function(ctx){
     this.draw(ctx);
     this.moveObjects();
-    this.spring.applyCollisionForce(this.vertices());
+    this.handleCollisions();
     // this.applyGravity();
   }
 }())
