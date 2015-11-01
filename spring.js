@@ -17,8 +17,8 @@
     this.count = 0;
     this.sprite = false;
     this._tickCount = 0;
-    this.ticksPerFrame = 12;
-    this.box = new BB.Box(10000, new BB.Vector(this.position.x + 8, this.position.y + boxYOffset[0]), 109, 25, true);
+    this.ticksPerFrame = 6;
+    this.box = new BB.Box(20000, new BB.Vector(this.position.x + 8, this.position.y + boxYOffset[0]), 109, 25, true);
   }
 
   Spring.prototype.updateBox = function (boxIdx) {
@@ -66,6 +66,7 @@
   Spring.prototype.applyCollisionForce = function (vertices, body) {
     vertices.forEach(function (vertex) {
       if (this.box.checkCollision(vertex)) {
+        // debugger;
         vertex.force = vertex.force.add(this.box.getForce(vertex.absPos, body));
         this.springing = true;
       }

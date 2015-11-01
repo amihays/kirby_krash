@@ -71,12 +71,11 @@
     // } else if (contactPos.x - this.getCenter().x < -30) {
     //   body.velocity.x -= 30;
     // }
-    // var diffVector = contactPos.subtract(this.getCenter());
-    // var unitVector = diffVector.unitVector();
-    // unitVector.x *= 0.2;
-    // unitVector.y *= 4;
-    // return unitVector.scale(this.forceMag);
-    return new BB.Vector(0, 0);
+    var diffVector = contactPos.subtract(this.getCenter());
+    var unitVector = diffVector.unitVector();
+    unitVector.x *= 0.2;
+    unitVector.y *= 4;
+    return unitVector.scale(this.forceMag);
   }
 
   Box.prototype.getPaddleForce = function (contactPos, body) {
@@ -92,6 +91,7 @@
     var unitVector = diffVector.unitVector();
     unitVector.x *= 0.2;
     unitVector.y *= 4;
+    // debugger;
     return unitVector.scale(this.forceMag);
   }
   //

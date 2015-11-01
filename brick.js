@@ -35,8 +35,11 @@
   }
 
   Brick.prototype.draw = function (ctx) {
+    ctx.fillStyle = "red";
+    ctx.beginPath();
     ctx.rect(this.position.x, this.position.y, this.width, this.height);
     ctx.stroke();
+    ctx.fill();
   }
 
   Brick.prototype.move = function () {

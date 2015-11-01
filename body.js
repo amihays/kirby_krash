@@ -74,21 +74,21 @@
                   this.drawing.width * scalar,
                   this.drawing.height * scalar);
     ctx.restore();
-  //
-  //   ctx.fillStyle = "red";
-  //   ctx.beginPath();
-  //
-  //   ctx.arc(this.position.x, //x pos
-  //           this.position.y, //y pos
-  //           5,
-  //           0,
-  //           Math.PI * 2,
-  //           false);
-  //   ctx.fill();
-  //
-  //   this.vertices.forEach(function(vertex){
-  //     vertex.draw(ctx);
-  //   });
+    //
+    // ctx.fillStyle = "red";
+    // ctx.beginPath();
+
+    // ctx.arc(this.position.x, //x pos
+    //         this.position.y, //y pos
+    //         5,
+    //         0,
+    //         Math.PI * 2,
+    //         false);
+    // ctx.fill();
+    //
+    // this.vertices.forEach(function(vertex){
+    //   vertex.draw(ctx);
+    // });
   }
 
   Body.prototype.updateForces = function (gravity) {
@@ -154,7 +154,7 @@
     //   }
     // }.bind(this))
 
-    this.resetLastVars();
     this.clearVertexForces();
+    this.resetLastVars();
   }
 }())

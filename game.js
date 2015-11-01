@@ -46,7 +46,7 @@
     // var bricks = [new BB.Brick(new BB.Vector(100, 100), 10000, this.handleBrickCollision.bind(this))];
     var bricks = [];
     XPos = 100;
-    while (XPos < Game.DIM_X - 600) {
+    while (XPos < Game.DIM_X - 150) {
       YPos = 100;
       while (YPos < 200) {
         bricks.push(new BB.Brick(new BB.Vector(XPos, YPos), 10000, this.handleBrickCollision.bind(this)));
@@ -88,7 +88,9 @@
 
   Game.prototype.handleBrickCollision = function (brick) {
     var brickIdx = this.bricks.indexOf(brick);
-    this.bricks.splice(brickIdx, 1);
+    if (brickIdx >= 0) {
+      this.bricks.splice(brickIdx, 1);
+    }
   }
 
   Game.prototype.vertices = function () {
@@ -108,8 +110,8 @@
 
   Game.prototype.step = function(ctx){
     this.draw(ctx);
-    this.moveObjects();
     this.handleCollisions();
+    this.moveObjects();
     // this.applyGravity();
   }
 }())
