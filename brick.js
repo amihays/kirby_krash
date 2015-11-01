@@ -18,6 +18,7 @@
   //   this.handleCollisionCallback(this);
   // }
   //
+
   Brick.prototype.applyCollisionForce = function (vertices, body) {
     var hit = false;
     vertices.forEach(function (vertex) {
@@ -36,12 +37,18 @@
   }
 
   Brick.prototype.draw = function (ctx) {
-    if (this.health === 3) {
-      ctx.fillStyle = "red";
+    if (this.health === 6) {
+      ctx.fillStyle = "rgb(255,105,180)";
+    } else if (this.health === 5) {
+      ctx.fillStyle = "rgb(144,238,144)";
+    } else if (this.health === 4) {
+      ctx.fillStyle = "rgb(255,140,0)";
+    } else if (this.health === 3) {
+      ctx.fillStyle = "rgb(0,191,255)";
     } else if (this.health === 2) {
-      ctx.fillStyle = "orange";
+      ctx.fillStyle = "rgb(65,105,225)";
     } else {
-      ctx.fillStyle = "teal";
+      ctx.fillStyle = "rgb(218,112,214)";
     }
     ctx.beginPath();
     ctx.rect(this.position.x, this.position.y, this.width, this.height);

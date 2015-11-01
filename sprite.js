@@ -1,10 +1,11 @@
 (function () {
   window.BB = window.BB || {};
 
-  var Sprite = BB.Sprite = function (drawing, pos, size, speed, frame, dir, once) {
+  var Sprite = BB.Sprite = function (drawing, pos, size, scalar, speed, frame, dir, once) {
     this.drawing = drawing;
     this.pos = pos;
     this.size = size;
+    this.scalar = scalar;
     this.speed = typeof speed === 'number' ? speed : 0;
     this._index = 0;
     this.frame = frame;
@@ -52,8 +53,8 @@
                   this.size[1],
                   this.pos[0],
                   this.pos[1],
-                  this.size[0],
-                  this.size[1]);
+                  this.size[0] * this.scalar,
+                  this.size[1] * this.scalar);
 
     // ctx.fillStyle = "red";
     // ctx.beginPath();

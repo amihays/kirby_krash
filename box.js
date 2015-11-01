@@ -81,6 +81,7 @@
   Box.prototype.getPaddleForce = function (contactPos, body) {
     if (body.velocity.y > 0) {
       body.velocity.y = -body.velocity.y
+      body.velocity.y -= 30;
       if (contactPos.x - this.getCenter().x > 30) {
         body.velocity.x += 30;
       } else if (contactPos.x - this.getCenter().x < -30) {
@@ -116,6 +117,7 @@
   }
 
   Box.prototype.draw = function (ctx) {
+    // ctx.beginPath();
     // ctx.rect(this.position.x,this.position.y, this.width, this.height);
     // ctx.stroke();
   }

@@ -7,6 +7,8 @@
     this.gravity = new BB.Vector(0, 0)
     this.spring = new BB.Spring()
     this.bricks = this.brickBuilder();
+    this.backgroundImage = new Image();
+    this.backgroundImage.src = "kirby-dreamland.png";
     // var drawing = new Image()
     // drawing.src = "spring_sprite.png"
     // this.sprite = new BB.Sprite(drawing,
@@ -50,9 +52,9 @@
       YPos = 150;
       while (YPos < 250) {
         bricks.push(new BB.Brick(new BB.Vector(XPos, YPos), 15000, this.handleBrickCollision.bind(this), 3));
-        YPos += 40;
+        YPos += 22;
       }
-      XPos += 70;
+      XPos += 62;
     }
     return bricks;
   }
@@ -60,9 +62,7 @@
   Game.prototype.draw = function(ctx){
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
     var scalar = 0.125;
-    var drawing = new Image();
-    drawing.src = "kirby-dreamland.png";
-    ctx.drawImage(drawing, 0, 0, Game.DIM_X, Game.DIM_Y);
+    ctx.drawImage(this.backgroundImage, 0, 0, Game.DIM_X, Game.DIM_Y);
     this.allObjects().forEach(function(body){
       body.draw(ctx);
     });
