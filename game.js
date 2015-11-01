@@ -21,7 +21,7 @@
   Game.DIM_Y = window.innerHeight;
 
   Game.bodyBuilder = function () {
-    var position = new BB.Vector(300, 100);
+    var position = new BB.Vector(BB.Game.DIM_X / 2 + 67, BB.Game.DIM_Y - 125);
     var velocity = new BB.Vector(0, 50);
     var force = new BB.Vector(0, 0);
     var angVel = 0;
@@ -45,11 +45,11 @@
   Game.prototype.brickBuilder = function () {
     // var bricks = [new BB.Brick(new BB.Vector(100, 100), 10000, this.handleBrickCollision.bind(this))];
     var bricks = [];
-    XPos = 100;
-    while (XPos < Game.DIM_X - 150) {
-      YPos = 100;
-      while (YPos < 200) {
-        bricks.push(new BB.Brick(new BB.Vector(XPos, YPos), 10000, this.handleBrickCollision.bind(this)));
+    XPos = 200;
+    while (XPos < Game.DIM_X - 250) {
+      YPos = 150;
+      while (YPos < 250) {
+        bricks.push(new BB.Brick(new BB.Vector(XPos, YPos), 15000, this.handleBrickCollision.bind(this), 3));
         YPos += 40;
       }
       XPos += 70;
@@ -59,6 +59,10 @@
 
   Game.prototype.draw = function(ctx){
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
+    var scalar = 0.125;
+    var drawing = new Image();
+    drawing.src = "kirby-dreamland.png";
+    ctx.drawImage(drawing, 0, 0, Game.DIM_X, Game.DIM_Y);
     this.allObjects().forEach(function(body){
       body.draw(ctx);
     });

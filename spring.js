@@ -18,7 +18,7 @@
     this.sprite = false;
     this._tickCount = 0;
     this.ticksPerFrame = 6;
-    this.box = new BB.Box(20000, new BB.Vector(this.position.x + 8, this.position.y + boxYOffset[0]), 109, 25, true);
+    this.box = new BB.Box(15000, new BB.Vector(this.position.x + 8, this.position.y + boxYOffset[0]), 109, 25, true);
   }
 
   Spring.prototype.updateBox = function (boxIdx) {
@@ -55,10 +55,10 @@
 
   Spring.prototype.move = function (velocity) {
     if (key.isPressed(37) && !key.isPressed(39) && this.position.x > 0) {
-      var diffVector = new BB.Vector(-5, 0);
+      var diffVector = new BB.Vector(-7, 0);
       this.position = this.position.add(diffVector)
     } else if (key.isPressed(39) && !key.isPressed(37) && this.position.x < BB.Game.DIM_X - 125) {
-      var diffVector = new BB.Vector(5, 0);
+      var diffVector = new BB.Vector(7, 0);
       this.position = this.position.add(diffVector)
     }
   }

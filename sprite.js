@@ -45,7 +45,6 @@
     // this.update()
     // var idx = Math.floor(this._index);
     // debugger;
-    var scalar = 1;
     ctx.drawImage(this.drawing,
                   this.frame[0],
                   this.frame[1],
@@ -53,8 +52,8 @@
                   this.size[1],
                   this.pos[0],
                   this.pos[1],
-                  this.size[0] * scalar,
-                  this.size[1] * scalar);
+                  this.size[0],
+                  this.size[1]);
 
     // ctx.fillStyle = "red";
     // ctx.beginPath();
