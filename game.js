@@ -2,7 +2,7 @@
   window.BB = window.BB || {};
 
   var Game = BB.Game = function () {
-    this.bodies = [Game.bodyBuilder()];
+    this.body = Game.bodyBuilder();
     this.dt = .1;
     this.gravity = new BB.Vector(0, 0)
     this.spring = new BB.Spring()
@@ -70,7 +70,7 @@
   }
 
   Game.prototype.allObjects = function () {
-    return this.bodies.concat([this.spring]).concat(this.bricks);
+    return [this.body].concat([this.spring]).concat(this.bricks);
   }
 
   Game.prototype.moveObjects = function () {
@@ -98,24 +98,26 @@
   }
 
   Game.prototype.vertices = function () {
-    var vertices = [];
-    this.bodies.forEach(function (body) {
-      vertices = vertices.concat(body.vertices)
-    }.bind(this))
-    return vertices;
+    return this.body.vertices;
   }
 
   Game.prototype.handleCollisions = function () {
-    this.spring.applyCollisionForce(this.vertices(), this.bodies[0]);
+    this.spring.applyCollisionForce(this.vertices(), this.body);
     this.bricks.forEach(function (brick) {
-      brick.applyCollisionForce(this.vertices(), this.bodies[0])
+      brick.applyCollisionForce(this.vertices(), this.body)
     }.bind(this))
   }
 
-  Game.prototype.step = function(ctx){
+  Game.prototype.isLost = function () { //checks if game is lost
+    return this.body.isBelowScreen();
+  }
+
+  Game.prototype.step = function(ctx, endCallback){
     this.draw(ctx);
     this.handleCollisions();
     this.moveObjects();
-    // this.applyGravity();
+    if (this.isLost()) {
+      endCallback();
+    }
   }
 }())

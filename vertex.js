@@ -27,7 +27,6 @@
       this.force.y = restoringForce;
       return -1;
     } else if (this.absPos.y > BB.Game.DIM_Y) {
-      this.force.y = -restoringForce;
       return 1;
     }
   }

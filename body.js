@@ -24,6 +24,16 @@
     this.speed = 50;
   }
 
+  Body.prototype.isBelowScreen = function () {
+    var allOutOfBounds = true;
+    this.vertices.forEach(function(vertex) {
+      if (vertex.outOfBoundsY() !== 1) {
+        allOutOfBounds = false;
+      }
+    })
+    return allOutOfBounds;
+  }
+
   Body.prototype.stop = function () {
     this.velocity.y = 0;
   }
@@ -102,8 +112,6 @@
       }
       if (vertex.outOfBoundsY() === -1) {
         this.velocity.y = Math.abs(this.velocity.y)
-      } else if (vertex.outOfBoundsY() === 1) {
-        this.velocity.y = -Math.abs(this.velocity.y)
       }
       // var bodyForce = vertex.force.unitVector();
       var relDirection = vertex.relPos.unitVector();

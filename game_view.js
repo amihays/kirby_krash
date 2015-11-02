@@ -4,24 +4,17 @@
   var GameView = BB.GameView = function(ctx) {
     this.game = new BB.Game();
     this.ctx = ctx;
+    this.intervalID;
   }
 
   GameView.prototype.start = function(){
     var gameView = this;
-    setInterval(function(){
-      gameView.game.step(gameView.ctx);
-    }, 10);
+    this.intervalID = setInterval(function(){
+      gameView.game.step(gameView.ctx, this.end.bind(this));
+    }.bind(this), 10);
   }
 
-  var lastTime;
-  GameView.prototype.main = function () {
-    var now = Date.now();
-    var dt = (now - lastTime) / 1000.0;
-
-    update(dt);
-    render();
-
-    lastTime = now;
-    requestAnimFrame(main);
-  };
+  GameView.prototype.end = function () {
+    clearInterval(this.intervalID);
+  }
 })();
