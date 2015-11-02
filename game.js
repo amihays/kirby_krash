@@ -9,13 +9,7 @@
     this.bricks = this.brickBuilder();
     this.backgroundImage = new Image();
     this.backgroundImage.src = "kirby-dreamland.png";
-    // var drawing = new Image()
-    // drawing.src = "spring_sprite.png"
-    // this.sprite = new BB.Sprite(drawing,
-    //                          [200, 200],
-    //                          [750 / 6, 250 / 2],
-    //                          .2,
-    //                          [0, 1, 2, 3, 4, 5, 0])
+    this.paused = true;
   }
 
   canvas = document.getElementById("game-canvas");
@@ -66,6 +60,13 @@
     this.allObjects().forEach(function(body){
       body.draw(ctx);
     });
+    if (this.paused) {
+      ctx.fillStyle = "black";
+      ctx.font = "48px serif";
+      // ctx.textAlign = "center";
+      // ctx.textBaseline = "hanging";
+      ctx.fillText("Hello world", Game.DIM_X / 2, Game.DIM_Y / 2);
+    }
     // this.sprite.draw(ctx);
   }
 
@@ -112,12 +113,24 @@
     return this.body.isBelowScreen();
   }
 
-  Game.prototype.step = function(ctx, endCallback){
+  Game.prototype.step = function(ctx){
     this.draw(ctx);
-    this.handleCollisions();
-    this.moveObjects();
-    if (this.isLost()) {
-      endCallback();
+    if (!this.paused) {
+      this.handleCollisions();
+      this.moveObjects();
+      if (this.isLost()) {
+        this.lost();
+      }
     }
   }
+
+  Game.prototype.togglePaused = function () {
+    this.paused = !this.paused;
+  }
+
+  Game.prototype.lost = function () {
+    clearInterval(this.intervalID);
+    this.paused = true;
+  }
+
 }())

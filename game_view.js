@@ -7,14 +7,15 @@
     this.intervalID;
   }
 
-  GameView.prototype.start = function(){
+  GameView.prototype.bindKeyHandlers = function () {
     var gameView = this;
-    this.intervalID = setInterval(function(){
-      gameView.game.step(gameView.ctx, this.end.bind(this));
-    }.bind(this), 10);
+    key("space", function(){ gameView.game.togglePaused(); return false; });
   }
 
-  GameView.prototype.end = function () {
-    clearInterval(this.intervalID);
+  GameView.prototype.start = function(){
+    this.bindKeyHandlers();
+    this.intervalID = setInterval(function(){
+      this.game.step(this.ctx);
+    }.bind(this), 10);
   }
 })();
