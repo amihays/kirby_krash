@@ -1,7 +1,7 @@
 (function () {
   window.BB = window.BB || {};
 
-  var Game = BB.Game = function () {
+  var Game = BB.Game = function (lostCallback) {
     this.body = Game.bodyBuilder();
     this.dt = .1;
     this.gravity = new BB.Vector(0, 0)
@@ -14,6 +14,7 @@
     this.paused = true;
     this.lives = 3;
     this.score = 0;
+    this.lostCallback = lostCallback;
   }
 
   canvas = document.getElementById("game-canvas");
@@ -138,7 +139,7 @@
       this.moveObjects();
       this.checkInBounds();
       if (this.isLost()) {
-        this.lost();
+        this.lost(this.lostCallback);
       }
     }
   }
@@ -148,8 +149,7 @@
   }
 
   Game.prototype.lost = function () {
-    clearInterval(this.intervalID);
-    this.paused = true;
+    this.lostCallback();
   }
 
 }())
