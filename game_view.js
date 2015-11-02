@@ -8,6 +8,7 @@
   }
 
   GameView.prototype.newGame = function () {
+    clearInterval(this.intervalID);
     this.game = new BB.Game(this.lost.bind(this));
     this.intervalID = setInterval(function(){
       this.game.step(this.ctx);
@@ -15,7 +16,6 @@
   }
 
   GameView.prototype.lost = function () {
-    clearInterval(this.intervalID);
     this.newGame();
   }
 
