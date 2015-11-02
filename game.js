@@ -9,7 +9,11 @@
     this.bricks = this.brickBuilder();
     this.backgroundImage = new Image();
     this.backgroundImage.src = "kirby-dreamland.png";
+    this.pauseImage = new Image();
+    this.pauseImage.src = "kirby_pause_modal.png";
     this.paused = true;
+    this.lives = 3;
+    this.score = 0;
   }
 
   canvas = document.getElementById("game-canvas");
@@ -17,7 +21,7 @@
   Game.DIM_Y = window.innerHeight;
 
   Game.bodyBuilder = function () {
-    var position = new BB.Vector(BB.Game.DIM_X / 2 + 67, BB.Game.DIM_Y - 125);
+    var position = new BB.Vector(BB.Game.DIM_X / 2 + 67, BB.Game.DIM_Y - 150);
     var velocity = new BB.Vector(0, 50);
     var force = new BB.Vector(0, 0);
     var angVel = 0;
@@ -53,19 +57,32 @@
     return bricks;
   }
 
+  Game.prototype.checkInBounds = function () {
+    if (this.body.isBelowScreen()) {
+      this.lives -= 1;
+      this.body = Game.bodyBuilder();
+      this.spring.position = new BB.Vector(Game.DIM_X / 2, Game.DIM_Y - 125 * this.spring.sizeScalar);
+    }
+  }
+
   Game.prototype.draw = function(ctx){
     ctx.clearRect(0, 0, Game.DIM_X, Game.DIM_Y);
     var scalar = 0.125;
     ctx.drawImage(this.backgroundImage, 0, 0, Game.DIM_X, Game.DIM_Y);
+    ctx.fillStyle = "black";
+    ctx.font = "36px serif";
+    ctx.fillText("score: " + this.score.toString(), 10, 40);
+    ctx.fillText("lives left: " + this.lives.toString(), 10, 90);
+
     this.allObjects().forEach(function(body){
       body.draw(ctx);
     });
     if (this.paused) {
+      ctx.globalAlpha = 0.7;
       ctx.fillStyle = "black";
-      ctx.font = "48px serif";
-      // ctx.textAlign = "center";
-      // ctx.textBaseline = "hanging";
-      ctx.fillText("Hello world", Game.DIM_X / 2, Game.DIM_Y / 2);
+      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(this.pauseImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
     }
     // this.sprite.draw(ctx);
   }
@@ -95,6 +112,7 @@
     var brickIdx = this.bricks.indexOf(brick);
     if (brickIdx >= 0) {
       this.bricks.splice(brickIdx, 1);
+      this.score += 10;
     }
   }
 
@@ -110,7 +128,7 @@
   }
 
   Game.prototype.isLost = function () { //checks if game is lost
-    return this.body.isBelowScreen();
+    return this.lives <= 0;
   }
 
   Game.prototype.step = function(ctx){
@@ -118,6 +136,7 @@
     if (!this.paused) {
       this.handleCollisions();
       this.moveObjects();
+      this.checkInBounds();
       if (this.isLost()) {
         this.lost();
       }
