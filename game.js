@@ -80,18 +80,18 @@
     this.allObjects().forEach(function(body){
       body.draw(ctx);
     });
-    if (this.paused) {
-      ctx.globalAlpha = 0.7;
-      ctx.fillStyle = "black";
-      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
-      ctx.globalAlpha = 1;
-      ctx.drawImage(this.pauseImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
-    } else if (this.lost) {
+    if (this.lost) {
       ctx.globalAlpha = 0.7;
       ctx.fillStyle = "black";
       ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
       ctx.globalAlpha = 1;
       ctx.drawImage(this.lostImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
+    } else if (this.paused) {
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(this.pauseImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
     }
     // this.sprite.draw(ctx);
   }
