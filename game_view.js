@@ -2,22 +2,26 @@
   window.BB = window.BB || {};
 
   var GameView = BB.GameView = function(ctx) {
-    this.game = new BB.Game(this.lost.bind(this));
+    this.game = new BB.Game();
     this.ctx = ctx;
     this.intervalID;
   }
 
-  GameView.prototype.newGame = function () {
+  GameView.prototype.endGame = function () {
     clearInterval(this.intervalID);
-    this.game = new BB.Game(this.lost.bind(this));
+  }
+
+  GameView.prototype.newGame = function () {
+    this.endGame();
+    this.game = new BB.Game();
     this.intervalID = setInterval(function(){
       this.game.step(this.ctx);
     }.bind(this), 10);
   }
-
-  GameView.prototype.lost = function () {
-    this.newGame();
-  }
+  //
+  // GameView.prototype.lost = function () {
+  //   this.newGame();
+  // }
 
   GameView.prototype.bindKeyHandlers = function () {
     var gameView = this;

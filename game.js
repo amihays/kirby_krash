@@ -1,7 +1,7 @@
 (function () {
   window.BB = window.BB || {};
 
-  var Game = BB.Game = function (lostCallback) {
+  var Game = BB.Game = function () {
     this.body = Game.bodyBuilder();
     this.dt = .1;
     this.gravity = new BB.Vector(0, 0)
@@ -14,7 +14,9 @@
     this.paused = true;
     this.lives = 3;
     this.score = 0;
-    this.lostCallback = lostCallback;
+    this.lostImage = new Image();
+    this.lostImage.src = "lose_screen.png";
+    this.lost = false;
   }
 
   canvas = document.getElementById("game-canvas");
@@ -84,6 +86,12 @@
       ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
       ctx.globalAlpha = 1;
       ctx.drawImage(this.pauseImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
+    } else if (this.lost) {
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(this.lostImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
     }
     // this.sprite.draw(ctx);
   }
@@ -134,12 +142,12 @@
 
   Game.prototype.step = function(ctx){
     this.draw(ctx);
-    if (!this.paused) {
+    if (!this.paused && !this.lost) {
       this.handleCollisions();
       this.moveObjects();
       this.checkInBounds();
       if (this.isLost()) {
-        this.lost(this.lostCallback);
+        this.lost = true;
       }
     }
   }
@@ -147,9 +155,4 @@
   Game.prototype.togglePaused = function () {
     this.paused = !this.paused;
   }
-
-  Game.prototype.lost = function () {
-    this.lostCallback();
-  }
-
 }())
