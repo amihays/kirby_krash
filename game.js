@@ -17,6 +17,9 @@
     this.lostImage = new Image();
     this.lostImage.src = "lose_screen.png";
     this.lost = false;
+    this.wonImage = new Image();
+    this.wonImage.src = "kirby_win_screen.png";
+    this.won = false;
   }
 
   canvas = document.getElementById("game-canvas");
@@ -86,6 +89,12 @@
       ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
       ctx.globalAlpha = 1;
       ctx.drawImage(this.lostImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
+    } else if (this.won) {
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = "black";
+      ctx.fillRect(0, 0, Game.DIM_X, Game.DIM_Y);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(this.wonImage, 0, 0, Game.DIM_X, this.pauseImage.height * (Game.DIM_X / this.pauseImage.width))
     } else if (this.paused) {
       ctx.globalAlpha = 0.7;
       ctx.fillStyle = "black";
@@ -140,14 +149,20 @@
     return this.lives <= 0;
   }
 
+  Game.prototype.isWon = function () {
+    return (this.bricks.length <= 0)
+  }
+
   Game.prototype.step = function(ctx){
     this.draw(ctx);
-    if (!this.paused && !this.lost) {
+    if (!this.paused && !this.lost && !this.won) {
       this.handleCollisions();
       this.moveObjects();
       this.checkInBounds();
       if (this.isLost()) {
         this.lost = true;
+      } else if (this.isWon()) {
+        this.won = true;
       }
     }
   }
