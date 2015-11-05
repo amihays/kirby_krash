@@ -11,14 +11,14 @@ Kirby Krash is a browser-based game inspired by Brick Breaker. Kirby is meshed w
 Vector class DRYs up code by compactly allowing for a wide array of vector operations.
 
 [Code][vector]
-[vector]: ./vector.js
+[vector]: ./lib/vector.js
 
 ## Body class
 
 Body class implements physics behind Kirby. Body contains series of vertices that can detect collision with walls or bricks, which exert a force on the vertex and contribute to rotational velocity on the body.
 
 [Code][body]
-[body]: ./body.js
+[body]: ./lib/body.js
 
 
 ## Box class
@@ -26,4 +26,4 @@ Body class implements physics behind Kirby. Body contains series of vertices tha
 Box class defines regions with which vertices of bodies may collide. Boxes are used in both the spring and the bricks. These two different classes have different force responses as implemented in the box class.
 
 [Code][box]
-[box]: ./box.js
+[box]: ./lib/box.js
