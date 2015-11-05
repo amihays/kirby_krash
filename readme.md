@@ -2,7 +2,7 @@
 
 [Live][pages]
 
-[pages]: https://amihays.github.io
+[pages]: https://amihays.github.io/kirby_krash
 
 Kirby Krash is a browser-based game inspired by Brick Breaker. Kirby is meshed with a series of vertices to make for a more refined collision detection system. These vertices also allow for rotational velocities to be calculated after collisions for more interesting dynamics.
 
